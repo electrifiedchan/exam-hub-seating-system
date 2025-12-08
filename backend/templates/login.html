@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Login{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: center; align-items: center; min-height: 60vh;">
+    <div class="glass-card" style="width: 100%; max-width: 400px;">
+        <h2 style="text-align: center;">Admin Access</h2>
+        <p style="text-align: center; color: var(--text-secondary); margin-bottom: 2rem;">
+            Secure entry for Exam Controllers
+        </p>
+
+        <form method="POST">
+            <div style="margin-bottom: 1rem;">
+                <label style="display: block; margin-bottom: 0.5rem; color: var(--text-secondary);">Username</label>
+                <input type="text" name="username" required placeholder="Enter username">
+            </div>
+
+            <div style="margin-bottom: 2rem;">
+                <label style="display: block; margin-bottom: 0.5rem; color: var(--text-secondary);">Password</label>
+                <input type="password" name="password" required placeholder="Enter password">
+            </div>
+
+            <button type="submit" style="width: 100%;">Login to Dashboard</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

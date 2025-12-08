@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+
+    <!-- Left: Create New Exam -->
+    <div class="glass-card">
+        <h3>Create New Exam</h3>
+        <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">
+            Upload student list and configure rooms.
+        </p>
+
+        <form action="{{ url_for('generate') }}" method="POST" enctype="multipart/form-data">
+            <label>Exam Name</label>
+            <input type="text" name="exam_name" placeholder="e.g. Final Semester 2024" required>
+
+            <label>Exam Date</label>
+            <input type="date" name="exam_date" required>
+
+            <label>Room Configuration</label>
+            <p style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 0.5rem;">
+                Format: RoomName:RowsxCols (comma separated)
+            </p>
+            <input type="text" name="room_config" placeholder="Hall A:5x5, Hall B:6x6"
+                value="Room 101:5x5, Room 102:5x5" required>
+
+            <label>Student List (Excel/CSV)</label>
+            <p style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 0.5rem;">
+                Columns: Name, Roll No, Subject
+            </p>
+            <input type="file" name="student_file" accept=".csv, .xlsx, .xls" required>
+
+            <button type="submit" style="width: 100%; margin-top: 1rem;">Generate Seating Plan</button>
+        </form>
+    </div>
+
+    <!-- Right: Recent Exams -->
+    <div class="glass-card">
+        <h3>Recent Exams</h3>
+        {% if exams %}
+        <div style="display: flex; flex-direction: column; gap: 1rem;">
+            {% for exam in exams %}
+            <div
+                style="background: rgba(255,255,255,0.03); padding: 1rem; border-radius: 8px; border: 1px solid var(--glass-border); display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <h4 style="margin: 0; color: white;">{{ exam.name }}</h4>
+                    <span style="font-size: 0.8rem; color: var(--text-secondary);">{{ exam.date }}</span>
+                </div>
+                <a href="{{ url_for('view_seating', exam_id=exam.id) }}" class="btn"
+                    style="padding: 0.5rem 1rem; font-size: 0.9rem;">View</a>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p style="color: var(--text-secondary);">No exams created yet.</p>
+        {% endif %}
+    </div>
+
+</div>
+{% endblock %}

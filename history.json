@@ -1,0 +1,40 @@
+[
+  {
+    "id": 1,
+    "exam_date": "2025-12-02",
+    "subject": "Research Methodology",
+    "created_at": "2025-12-01 12:27",
+    "total_students": 7,
+    "seating": [
+      {
+        "seat_no": 1,
+        "name": "Aishwarya"
+      },
+      {
+        "seat_no": 2,
+        "name": "Issa"
+      },
+      {
+        "seat_no": 3,
+        "name": "Kavya shree"
+      },
+      {
+        "seat_no": 4,
+        "name": "Shashank"
+      },
+      {
+        "seat_no": 5,
+        "name": "Sushma"
+      },
+      {
+        "seat_no": 6,
+        "name": "Thejas"
+      },
+      {
+        "seat_no": 7,
+        "name": "Yukt.p"
+      }
+    ]
+  }
+]
+

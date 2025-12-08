@@ -1,0 +1,9 @@
+# Dependencies for ExamHub
+flask
+flask-sqlalchemy
+flask-login
+flask-cors
+pandas
+openpyxl
+reportlab
+pypdf2

@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+
+{% block title %}Seating Plan - {{ exam.name }}{% endblock %}
+
+{% block extra_css %}
+<style>
+    .room-container {
+        margin-bottom: 3rem;
+    }
+
+    .seat-grid {
+        display: grid;
+        gap: 10px;
+        margin-top: 1rem;
+    }
+
+    .seat {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid var(--glass-border);
+        border-radius: 8px;
+        padding: 0.8rem;
+        text-align: center;
+        transition: transform 0.2s;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .seat:hover {
+        transform: scale(1.05);
+        background: rgba(255, 255, 255, 0.1);
+        border-color: var(--accent-cyan);
+    }
+
+    .seat-number {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        font-size: 0.7rem;
+        opacity: 0.5;
+    }
+
+    .student-name {
+        font-weight: 600;
+        font-size: 0.9rem;
+        margin-bottom: 0.2rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .student-roll {
+        font-size: 0.8rem;
+        color: var(--text-secondary);
+    }
+
+    .subject-tag {
+        display: inline-block;
+        font-size: 0.7rem;
+        padding: 2px 6px;
+        border-radius: 4px;
+        margin-top: 4px;
+        background: rgba(123, 97, 255, 0.2);
+        color: var(--accent-violet);
+    }
+
+    .seat.empty {
+        opacity: 0.3;
+        border-style: dashed;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+    <div>
+        <h1>{{ exam.name }}</h1>
+        <p style="color: var(--text-secondary);">{{ exam.date }}</p>
+    </div>
+    <a href="{{ url_for('dashboard') }}" class="btn"
+        style="background: transparent; border: 1px solid var(--glass-border);">Back to Dashboard</a>
+</div>
+
+{% for room in exam.rooms %}
+<div class="glass-card room-container">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h3>{{ room.room_number }}</h3>
+        <span style="color: var(--text-secondary);">Capacity: {{ room.capacity }}</span>
+    </div>
+
+    <div class="seat-grid" style="grid-template-columns: repeat({{ room.cols }}, 1fr);">
+        {% for i in range(1, room.capacity + 1) %}
+        {% set ns = namespace(found=false, student=none) %}
+        {% for s in room.students %}
+        {% if s.seat_number == i %}
+        {% set ns.found = true %}
+        {% set ns.student = s %}
+        {% endif %}
+        {% endfor %}
+
+        {% if ns.found %}
+        <div class="seat">
+            <span class="seat-number">{{ i }}</span>
+            <div class="student-name" title="{{ ns.student.name }}">{{ ns.student.name }}</div>
+            <div class="student-roll">{{ ns.student.roll_no }}</div>
+            <div class="subject-tag">{{ ns.student.subject }}</div>
+        </div>
+        {% else %}
+        <div class="seat empty">
+            <span class="seat-number">{{ i }}</span>
+            <div style="margin-top: 0.5rem; font-size: 0.8rem;">Empty</div>
+        </div>
+        {% endif %}
+        {% endfor %}
+    </div>
+</div>
+{% endfor %}
+
+{% endblock %}

@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Seating Arrangement - Exam Seating System</title>
+
+    <!-- Google Font (Canva-ish rounded font) -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #00c4cc;
+            --primary-dark: #0099a3;
+            --accent: #7b61ff;
+            --bg-dark: #050816;
+            --card-bg: #ffffff;
+            --text-main: #111827;
+            --text-muted: #6b7280;
+            --border-soft: #e5e7eb;
+            --shadow-soft: 0 20px 40px rgba(15, 23, 42, 0.25);
+            --radius-xl: 18px;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Poppins", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            margin: 0;
+            padding: 32px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            background: radial-gradient(circle at top left, #1f2937 0, #050816 50%, #020617 100%);
+            color: var(--text-main);
+        }
+
+        .page-shell {
+            width: 100%;
+            max-width: 1120px;
+        }
+
+        /* Top navigation bar (like Canva header) */
+        .top-nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 18px;
+            color: #e5e7eb;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .brand-logo {
+            width: 32px;
+            height: 32px;
+            border-radius: 999px;
+            background: radial-gradient(circle at 30% 30%, #ffffff 0, #a855f7 25%, #22c1c3 70%, #16a34a 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 16px;
+            color: #0f172a;
+            box-shadow: 0 0 0 2px rgba(148, 163, 184, 0.4);
+        }
+
+        .brand-name {
+            font-weight: 600;
+            letter-spacing: 0.03em;
+            font-size: 18px;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            font-size: 13px;
+        }
+
+        .nav-links a {
+            color: #e5e7eb;
+            text-decoration: none;
+            opacity: 0.8;
+        }
+
+        .nav-links a:hover {
+            opacity: 1;
+        }
+
+        .nav-user-pill {
+            font-size: 12px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: rgba(15, 23, 42, 0.7);
+            border: 1px solid rgba(148, 163, 184, 0.5);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .nav-user-pill span {
+            max-width: 180px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* Main card */
+        .container {
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.99), rgba(248, 250, 252, 0.98));
+            border-radius: 24px;
+            padding: 24px 24px 20px;
+            box-shadow: var(--shadow-soft);
+            border: 1px solid rgba(148, 163, 184, 0.25);
+        }
+
+        .header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        h2 {
+            margin: 0;
+            font-size: 22px;
+            font-weight: 600;
+            letter-spacing: 0.03em;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .pill-badge {
+            font-size: 11px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: rgba(59, 130, 246, 0.08);
+            color: #1d4ed8;
+            border: 1px solid rgba(59, 130, 246, 0.25);
+        }
+
+        .summary {
+            font-size: 13px;
+            color: var(--text-muted);
+            line-height: 1.7;
+        }
+
+        .summary strong {
+            color: var(--text-main);
+            font-weight: 600;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 8px 16px;
+            margin-top: 4px;
+        }
+
+        /* Table wrapper to give “canvas panel” feel */
+        .table-shell {
+            margin-top: 18px;
+            border-radius: 18px;
+            border: 1px solid var(--border-soft);
+            overflow: hidden;
+            background: #ffffff;
+        }
+
+        .table-header-bar {
+            padding: 10px 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(90deg, rgba(0, 196, 204, 0.08), rgba(123, 97, 255, 0.06));
+            border-bottom: 1px solid var(--border-soft);
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .table-header-bar .label {
+            font-weight: 500;
+            color: var(--text-main);
+            font-size: 13px;
+        }
+
+        .table-header-bar .chip {
+            border-radius: 999px;
+            padding: 4px 8px;
+            border: 1px solid rgba(148, 163, 184, 0.6);
+            font-size: 11px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 8px 10px;
+            text-align: left;
+            font-size: 13px;
+        }
+
+        thead th {
+            background: #f9fafb;
+            border-bottom: 1px solid var(--border-soft);
+            font-weight: 500;
+            color: #4b5563;
+        }
+
+        tbody tr:nth-child(even) {
+            background: #f9fafb;
+        }
+
+        tbody tr:hover {
+            background: #eef2ff;
+        }
+
+        td {
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        .seat-col {
+            width: 15%;
+            font-weight: 500;
+            color: #374151;
+        }
+
+        .name-col {
+            width: 35%;
+        }
+
+        .empty-cell {
+            color: #d1d5db;
+            font-style: italic;
+        }
+
+        /* Actions row */
+        .actions {
+            margin-top: 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .action-left {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 9px 18px;
+            border-radius: 999px;
+            font-size: 13px;
+            border: none;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 500;
+            text-decoration: none;
+            transition: transform 0.08s ease, box-shadow 0.08s ease, background 0.15s ease;
+            box-shadow: 0 10px 18px rgba(15, 23, 42, 0.18);
+        }
+
+        .btn span.icon {
+            font-size: 14px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: #ffffff;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 18px 30px rgba(37, 99, 235, 0.35);
+        }
+
+        .btn-secondary {
+            background: #e5e7eb;
+            color: #111827;
+            box-shadow: 0 8px 14px rgba(15, 23, 42, 0.12);
+        }
+
+        .btn-secondary:hover {
+            background: #d1d5db;
+            transform: translateY(-1px);
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 18px;
+            }
+            .container {
+                padding: 18px 16px;
+            }
+            .header-row {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .summary-grid {
+                grid-template-columns: 1fr;
+            }
+            .top-nav {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+            .nav-links {
+                gap: 10px;
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="page-shell">
+
+    <!-- Canva-like top nav -->
+    <header class="top-nav">
+        <div class="nav-left">
+            <div class="brand-logo">ES</div>
+            <div class="brand-name">ExamSeater</div>
+        </div>
+
+        <div class="nav-links">
+            <a href="{{ url_for('home') }}">Home</a>
+            <a href="{{ url_for('dashboard') }}">Dashboard</a>
+            <a href="{{ url_for('logout') }}">Logout</a>
+
+            <div class="nav-user-pill">
+                <span>Logged in as: {{ session.get('user') }}</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="header-row">
+            <div>
+                <h2>
+                    Exam Seating Arrangement
+                    <span class="pill-badge">Auto-generated layout</span>
+                </h2>
+            </div>
+
+            <div class="summary">
+                <div class="summary-grid">
+                    <div>Exam Date: <strong>{{ exam_date }}</strong></div>
+                    <div>Subject: <strong>{{ subject }}</strong></div>
+                    <div>Total Students: <strong>{{ total }}</strong></div>
+                </div>
+            </div>
+        </div>
+
+        <section class="table-shell">
+            <div class="table-header-bar">
+                <div class="label">Seating layout</div>
+                <div class="chip">Paired per bench</div>
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th class="seat-col">Seat No</th>
+                        <th class="name-col">Student Name</th>
+                        <th class="seat-col">Seat No</th>
+                        <th class="name-col">Student Name</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for pair in seat_pairs %}
+                    <tr>
+                        <td class="seat-col">{{ pair.left.seat_no }}</td>
+                        <td class="name-col">{{ pair.left.name }}</td>
+
+                        {% if pair.right %}
+                            <td class="seat-col">{{ pair.right.seat_no }}</td>
+                            <td class="name-col">{{ pair.right.name }}</td>
+                        {% else %}
+                            <td class="seat-col empty-cell">—</td>
+                            <td class="name-col empty-cell">Empty seat</td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </section>
+
+        <div class="actions">
+            <div class="action-left">
+                Arrange, export and reuse layouts just like a Canva design.
+            </div>
+            <div class="btn-group">
+                <a class="btn btn-primary" href="{{ url_for('download_pdf') }}">
+                    <span class="icon">⬇️</span>
+                    <span>Download as PDF</span>
+                </a>
+                <a class="btn btn-secondary" href="{{ url_for('dashboard') }}">
+                    <span class="icon">↩️</span>
+                    <span>Back to Dashboard</span>
+                </a>
+            </div>
+        </div>
+    </main>
+
+</div>
+</body>
+</html>
